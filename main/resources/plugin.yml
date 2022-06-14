@@ -1,0 +1,22 @@
+name: PhysicsEngine
+version: '${project.version}'
+main: io.github.zilosz.physicsengine.PhysicsEngine
+api-version: 1.18
+
+depend: [FastAsyncWorldEdit]
+
+commands:
+  setarenarestrictions:
+    description: Toggles arena restrictions on or off.
+    aliases: [sar]
+  location:
+    description: Logs the location of the user.
+  setattribute:
+    description: Changes the value of a specified attribute.
+    aliases: [sa]
+  resetattributes:
+    description: Resets all attributes to their default values.
+    aliases: [ra]
+  attributehelp:
+    description: Sends all attribute information.
+    aliases: [ah]
