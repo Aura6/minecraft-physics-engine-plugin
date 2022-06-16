@@ -3,12 +3,14 @@ package io.github.zilosz.physicsengine.utils;
 public class Attribute {
 
     private final String name;
+    private final String unit;
     private double value;
     private final double minValue;
     private final double maxValue;
 
-    public Attribute(String name, double value, double minValue, double maxValue) {
+    public Attribute(String name, String unit, double value, double minValue, double maxValue) {
         this.name = name;
+        this.unit = unit;
         this.value = value;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -16,6 +18,10 @@ public class Attribute {
 
     public String getName() {
         return name;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 
     public double getValue() {
@@ -39,6 +45,6 @@ public class Attribute {
     }
 
     public Attribute getClone() {
-        return new Attribute(name, value, minValue, maxValue);
+        return new Attribute(name, unit, value, minValue, maxValue);
     }
 }

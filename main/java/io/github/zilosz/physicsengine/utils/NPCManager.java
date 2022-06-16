@@ -25,11 +25,12 @@ public class NPCManager {
 
     public static void setupNPCs() {
         createNPC(ChatUtils.color("&a&lMr. Braden"), "FatTadPole", new Location(Bukkit.getWorld("lobby"), 0.5, 0, 12.5), 0, 180);
-        createNPC(ChatUtils.color("&a&lMr. Braden"), "FatTadPole", new Location(Bukkit.getWorld("main"), 0.5, 0, 25), 0, 180);
+        createNPC(ChatUtils.color("&a&lMr. Braden"), "FatTadPole", new Location(Bukkit.getWorld("main"), 1.44, 0, 25), 0, 180);
         createNPC(ChatUtils.color("&e&lBall"), "valkyh", new Location(Bukkit.getWorld("main"), 5, 0, 24.5), 0, 167.5f);
         createNPC(ChatUtils.color("&b&lP. Elastic"), "UselessLucky", new Location(Bukkit.getWorld("main"), -9.5, 0, 23.5), 0, 211);
-        createNPC(ChatUtils.color("&5&lP. Inelastic"), "interchanges", new Location(Bukkit.getWorld("main"), 8.5, 0, 23.5), 0, 159);
-        createNPC(ChatUtils.color("&8&lInelastic"), "Daarkbladeee", new Location(Bukkit.getWorld("main"), -6, 0, 24.5), 0, 167.5f);
+        createNPC(ChatUtils.color("&5&lP. Inelastic"), "ThibaudLasticot", new Location(Bukkit.getWorld("main"), 8.5, 0, 23.5), 0, 159);
+        createNPC(ChatUtils.color("&8&lInelastic"), "Daarkbladeee", new Location(Bukkit.getWorld("main"), -6, 0, 24.5), 0, -167.5f);
+        createNPC(ChatUtils.color("&2Attributes"), "xaeverV3", new Location(Bukkit.getWorld("main"), -1.44, 0, 25.4), 0, -180);
     }
 
     public static List<EntityPlayer> getNPCsInWorld(World world) {

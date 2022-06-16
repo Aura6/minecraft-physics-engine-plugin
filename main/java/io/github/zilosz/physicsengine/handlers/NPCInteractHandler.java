@@ -4,10 +4,7 @@ import io.github.zilosz.physicsengine.tools.BallTool;
 import io.github.zilosz.physicsengine.tools.InelasticCollisionTool;
 import io.github.zilosz.physicsengine.tools.PerfectlyElasticCollisionTool;
 import io.github.zilosz.physicsengine.tools.PerfectlyInelasticCollisionTool;
-import io.github.zilosz.physicsengine.utils.Category;
-import io.github.zilosz.physicsengine.utils.ChatUtils;
-import io.github.zilosz.physicsengine.utils.NPCManager;
-import io.github.zilosz.physicsengine.utils.ToolManager;
+import io.github.zilosz.physicsengine.utils.*;
 import net.minecraft.server.level.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -77,6 +74,9 @@ public class NPCInteractHandler implements Listener {
 
             } else if (npcEntity.getName().contains("Inelastic")) {
                 ToolManager.addTool(new InelasticCollisionTool(), player);
+
+            } else if (npcEntity.getName().contains("Attributes")) {
+                AttributeManager.sendAllAttributeInformation(player);
             }
         }
     }

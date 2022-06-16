@@ -10,7 +10,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -18,9 +17,10 @@ import org.bukkit.util.Vector;
 
 public class BallTool extends Tool implements Listener {
 
+    private static final double COOLDOWN = 5;
+
     private Projectile ball;
     private Vector horizontalDirection;
-    private boolean isUsed = false;
 
     public BallTool() {
         Bukkit.getPluginManager().registerEvents(this, PhysicsEngine.getInstance());
@@ -48,18 +48,13 @@ public class BallTool extends Tool implements Listener {
 
     @Override
     public void onUse() {
+        if (CooldownManager.checkIfOnCooldown(this)) return;
 
-        if (isUsed) {
-            player.sendMessage(ChatUtils.color(Category.TOOL + "The ball is already active."));
-            return;
-        }
-
-        isUsed = true;
+        CooldownManager.startCooldown(this, COOLDOWN);
 
         Location launchLoc = player.getEyeLocation();
-        ball = (Snowball) player.getWorld().spawnEntity(launchLoc, EntityType.SNOWBALL);
-        ball.setVelocity(launchLoc.getDirection().multiply(AttributeManager.get("ball_speed")));
-        ball.setCustomNameVisible(true);
+        ball = (Projectile) player.getWorld().spawnEntity(launchLoc, EntityType.SNOWBALL);
+        ball.setVelocity(launchLoc.getDirection().multiply(AttributeManager.get("ball_speed")/20));
 
         launchLoc.setPitch(0);
         horizontalDirection = launchLoc.getDirection();
@@ -74,30 +69,33 @@ public class BallTool extends Tool implements Listener {
         if (face == null || event.getEntity() != ball) return;
 
         Vector velBefore = ball.getVelocity();
-        double verticalVelAfter = velBefore.getY() * AttributeManager.get("ball_vertical_COR");
+        double verticalVelAfter = AttributeManager.get("ball_vertical_COR") * velBefore.getY();
         double horizontalVelAfter = AttributeManager.get("ball_horizontal_COR")
                 * Math.sqrt(Math.pow(velBefore.getX(), 2)+Math.pow(velBefore.getZ(), 2));
 
         if (face == BlockFace.UP || face == BlockFace.DOWN) {
             verticalVelAfter *= -1;
 
-        } else if (face == BlockFace.WEST || face == BlockFace.EAST || face == BlockFace.SOUTH || face == BlockFace.NORTH) {
+        } else if (
+                face == BlockFace.WEST || face == BlockFace.EAST
+                || face == BlockFace.SOUTH || face == BlockFace.NORTH
+        ) {
             horizontalDirection.multiply(-1);
         }
 
         Vector newVelocity = horizontalDirection.clone().multiply(horizontalVelAfter).add(new Vector(0, verticalVelAfter, 0));
 
-        if (newVelocity.length() < AttributeManager.get("ball_min_vel")) {
+        if (newVelocity.length() < AttributeManager.get("ball_min_vel")/20) {
             ParticleUtils.displayBoom(Particles.aA, ball.getLocation(), 2, 0.2, 4, 0, 0, 0);
             player.playSound(ball.getLocation(), Sound.ENTITY_SLIME_DEATH, 2, 2);
             ball.remove();
-            isUsed = false;
             return;
         }
 
         ball.remove();
-        ball = (Snowball) player.getWorld().spawnEntity(ball.getLocation(), EntityType.SNOWBALL);
+        ball = (Projectile) player.getWorld().spawnEntity(ball.getLocation(), EntityType.SNOWBALL);
         ball.setVelocity(newVelocity);
+        ParticleUtils.addParticleTrail(ball, Particles.aA, 0, 0, 0, 2, 1);
         player.getWorld().playSound(ball.getLocation(), Sound.ENTITY_SLIME_SQUISH, 1, 1);
 
         player.sendMessage(ChatUtils.color(Category.TOOL + "New Velocity: "

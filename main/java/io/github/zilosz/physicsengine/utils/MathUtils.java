@@ -8,8 +8,8 @@ import java.util.Random;
 
 public class MathUtils {
 
-    private static final Random random = new Random(System.nanoTime());
-    private static final DecimalFormat format = new DecimalFormat("#.##");
+    public static final Random random = new Random(System.nanoTime());
+    public static final DecimalFormat format = new DecimalFormat("#.##");
 
     public static Vector getRandomUpwardVector() {
         double x = random.nextDouble() * 2 - 1;

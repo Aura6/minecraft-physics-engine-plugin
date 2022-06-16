@@ -29,7 +29,7 @@ public class PerfectlyInelasticCollisionTool extends CollisionToolTemplate {
 
     @Override
     public Material getMaterial() {
-        return Material.STONE_BRICKS;
+        return Material.LIGHT_BLUE_WOOL;
     }
 
     @Override
