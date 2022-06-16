@@ -29,7 +29,7 @@ public class InelasticCollisionTool extends CollisionToolTemplate {
 
     @Override
     public Material getMaterial() {
-        return Material.STONE;
+        return Material.RED_WOOL;
     }
 
     @Override

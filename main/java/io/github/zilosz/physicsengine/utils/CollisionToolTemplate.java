@@ -17,7 +17,8 @@ import org.bukkit.util.Vector;
 
 public abstract class CollisionToolTemplate extends Tool implements Listener {
 
-    private boolean isUsed = false;
+    private static final double COOLDOWN = 7.5;
+
     private final Material materialA;
     private final Material materialB;
 
@@ -29,13 +30,9 @@ public abstract class CollisionToolTemplate extends Tool implements Listener {
 
     @Override
     public void onUse() {
+        if (CooldownManager.checkIfOnCooldown(this)) return;
 
-        if (isUsed) {
-            player.sendMessage(ChatUtils.color(Category.TOOL + "The collision has already started."));
-            return;
-        }
-
-        isUsed = true;
+        CooldownManager.startCooldown(this, COOLDOWN);
 
         Location launchLoc = player.getEyeLocation();
         Vector direction = launchLoc.getDirection();
@@ -64,10 +61,10 @@ public abstract class CollisionToolTemplate extends Tool implements Listener {
     }
 
     private void startCollision(FallingBlock blockA, FallingBlock blockB, Vector direction) {
-        final Vector[] velA = {direction.clone().multiply(AttributeManager.get("block_a_speed"))};
+        final Vector[] velA = {direction.clone().multiply(AttributeManager.get("block_a_speed")/20)};
         blockA.setVelocity(velA[0]);
 
-        final Vector[] velB = {direction.clone().multiply(AttributeManager.get("block_b_speed"))};
+        final Vector[] velB = {direction.clone().multiply(AttributeManager.get("block_b_speed")/20)};
         blockB.setVelocity(velB[0]);
 
         new BukkitRunnable() {
@@ -97,13 +94,26 @@ public abstract class CollisionToolTemplate extends Tool implements Listener {
                 }
 
                 if (!hasCollided && areBlocksColliding(blockA, blockB)) {
-                    isUsed = false;
                     hasCollided = true;
 
                     Tuple<Double, Double> newSpeeds = getNewBlockSpeeds(blockA, blockB);
 
-                    velA[0] = direction.clone().multiply(newSpeeds.a());
-                    velB[0] = direction.clone().multiply(newSpeeds.b());
+                    if (newSpeeds.a() == 0 && newSpeeds.b() == 0) {
+
+                        new BukkitRunnable() {
+
+                            @Override
+                            public void run() {
+                                blockA.remove();
+                                blockB.remove();
+                                player.sendMessage(ChatUtils.color(Category.TOOL + "Both blocks had a velocity of 0. They have been removed."));
+                            }
+
+                        }.runTaskLater(PhysicsEngine.getInstance(), 60);
+                    }
+
+                    velA[0] = direction.clone().multiply(newSpeeds.a()/20);
+                    velB[0] = direction.clone().multiply(newSpeeds.b()/20);
 
                     player.sendMessage(ChatUtils.color(Category.TOOL + "&aBlock A final velocity: &f" + MathUtils.formatDecimals(newSpeeds.a())) + ".");
                     player.sendMessage(ChatUtils.color(Category.TOOL + "&bBlock B final velocity: &f" + MathUtils.formatDecimals(newSpeeds.b())) + ".");

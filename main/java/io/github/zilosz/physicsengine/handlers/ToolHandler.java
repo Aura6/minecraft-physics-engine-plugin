@@ -16,12 +16,13 @@ public class ToolHandler implements Listener {
         if (event.hasItem() && ToolManager.doesPlayerHaveTool(event.getMaterial(), event.getPlayer())) {
             Tool tool = ToolManager.getToolByMaterial(event.getPlayer(), event.getMaterial());
 
-            if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                tool.sendDescription();
-
-            } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
                 event.getPlayer().sendMessage(ChatUtils.color(Category.TOOL + "You have used the " + tool.getColor() + tool.getName() + "&f tool."));
                 tool.onUse();
+
+            } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                tool.sendDescription();
+
             }
         }
     }

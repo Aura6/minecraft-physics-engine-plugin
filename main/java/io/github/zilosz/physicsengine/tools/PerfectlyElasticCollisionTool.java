@@ -31,7 +31,7 @@ public class PerfectlyElasticCollisionTool extends CollisionToolTemplate{
 
     @Override
     public Material getMaterial() {
-        return Material.CHISELED_STONE_BRICKS;
+        return Material.GREEN_WOOL;
     }
 
     @Override

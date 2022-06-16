@@ -29,7 +29,7 @@ public abstract class Tool {
 
         ItemStack itemStack = new ItemStack(getMaterial());
         ItemMeta meta = itemStack.getItemMeta();
-        meta.setDisplayName(ChatUtils.color("&l" + getColor() + getName() + "&r - Left click to get description."));
+        meta.setDisplayName(ChatUtils.color("&l" + getColor() + getName() + "&r - Right click to use."));
         itemStack.setItemMeta(meta);
         player.getInventory().addItem(itemStack);
 
@@ -40,12 +40,8 @@ public abstract class Tool {
     public void sendDescription() {
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
         player.sendMessage(ChatUtils.color(getColor() + "-".repeat(40)));
-        player.sendMessage("");
         player.sendMessage(ChatUtils.color(Category.TOOL + "- " + getColor() + getName()));
         ChatUtils.insertBreaks(getDescription(), 40).forEach(player::sendMessage);
-        player.sendMessage("");
-        player.sendMessage(ChatUtils.color("Press 'q' to remove."));
-        player.sendMessage(ChatUtils.color("Right click to use."));
         player.sendMessage(ChatUtils.color(getColor() + "-".repeat(40)));
     }
 }

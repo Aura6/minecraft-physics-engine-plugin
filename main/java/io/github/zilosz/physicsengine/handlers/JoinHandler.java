@@ -18,13 +18,20 @@ public class JoinHandler implements Listener {
 
     @EventHandler void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        event.setJoinMessage(ChatUtils.color(Category.JOIN + player.getName() + " &rhas joined."));
+
+        event.setJoinMessage("");
+        Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(ChatUtils.color(Category.JOIN + player.getName() + " &rhas joined.")));
+        player.sendMessage(ChatUtils.color(Category.COMMAND + "/setattribute sets an attribute value."));
+        player.sendMessage(ChatUtils.color(Category.COMMAND + "/attributehelp sends all attribute data."));
+        player.sendMessage(ChatUtils.color(Category.COMMAND + "/resetattributes resets all attribute values."));
+
         player.teleport(Objects.requireNonNull(Bukkit.getWorld("lobby")).getSpawnLocation());
         player.setGameMode(GameMode.CREATIVE);
         player.setAllowFlight(false);
         player.setFlying(false);
         player.setWalkSpeed(0.2f);
         player.getInventory().clear();
+
         NPCManager.showWorldNPCsToPlayer(player.getWorld(), player);
         ToolManager.createToolList(player);
     }
